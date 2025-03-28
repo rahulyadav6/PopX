@@ -3,7 +3,7 @@ import './App.css';
 import LandingPage from './pages/LandingPage';
 import SigninPage from './pages/SigninPage';
 import ProfilePage from './pages/ProfilePage';
-import SignupPage from './pages/SignUpPage';
+import SignupPage from './pages/SignupPage';
 import { UserProvider } from './context/UserContext';
 
 function App() {
