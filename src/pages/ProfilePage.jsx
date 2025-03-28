@@ -1,34 +1,17 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useRef, useContext } from 'react';
 import { Camera } from 'lucide-react';
+import { UserContext } from '../context/UserContext';
 
 const ProfileSettings = () => {
-  const [userData, setUserData] = useState(() => {
-    const savedUserData = localStorage.getItem('userData');
-    return savedUserData 
-      ? JSON.parse(savedUserData) 
-      : {
-          fullName: 'Rahul',
-          email: 'ry573870@gmail.com',
-          companyName: 'abc',
-          profilePic: 'https://via.placeholder.com/100'
-        };
-  });
-
+  const { currentUser, updateCurrentUser } = useContext(UserContext);
   const fileInputRef = useRef(null);
-
-  useEffect(() => {
-    localStorage.setItem('userData', JSON.stringify(userData));
-  }, [userData]);
 
   const handleImageChange = (e) => {
     const file = e.target.files[0];
     if (file) {
       const reader = new FileReader();
       reader.onloadend = () => {
-        setUserData(prev => ({
-          ...prev,
-          profilePic: reader.result
-        }));
+        updateCurrentUser({ profilePic: reader.result });
       };
       reader.readAsDataURL(file);
     }
@@ -37,6 +20,8 @@ const ProfileSettings = () => {
   const triggerFileInput = () => {
     fileInputRef.current.click();
   };
+
+  const defaultAvatar = 'https://via.placeholder.com/100';
 
   return (
     <div className='flex flex-col items-center justify-end min-h-screen px-6 text-center bg-white'>
@@ -51,7 +36,7 @@ const ProfileSettings = () => {
               <img 
                 alt='User Avatar' 
                 className='object-cover w-24 h-24 border-2 border-gray-300 rounded-full' 
-                src={userData.profilePic}
+                src={currentUser.profilePic || defaultAvatar}
               />
               <span className='absolute bottom-0 right-0 p-2 bg-gray-200 rounded-full'>
                 <Camera size={16} />
@@ -67,9 +52,9 @@ const ProfileSettings = () => {
           </div>
 
           <div className='flex flex-col text-left'>
-            <h3 className='text-lg font-bold'>{userData.fullName}</h3>
-            <p className='text-sm text-gray-500'>Email: {userData.email}</p>
-            <p className='text-sm text-gray-500'>Company: {userData.companyName}</p>
+            <h3 className='text-lg font-bold'>{currentUser.fullName}</h3>
+            <p className='text-sm text-gray-500'>Email: {currentUser.email}</p>
+            <p className='text-sm text-gray-500'>Company: {currentUser.companyName}</p>
           </div>
         </div>
 
@@ -78,6 +63,7 @@ const ProfileSettings = () => {
           <p className='text-gray-500 text-md'>
             Lorem ipsum dolor sit amet consectetur adipisicing elit. Vitae, quod consectetur? Animi adipisci dicta modi itaque, praesentium illo hic est.
           </p>
+          
         </div>
       </div>
     </div>

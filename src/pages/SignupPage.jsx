@@ -1,8 +1,10 @@
-import React, { useState } from 'react'
+import React, { useContext, useState } from 'react'
 import { useNavigate } from 'react-router-dom';
+import { UserContext } from '../context/UserContext';
 
 const SignupPage = () => {
   const navigate = useNavigate();
+  const { registerUser } = useContext(UserContext);
   const [formData, setFormData] = useState({
     fullName: '',
     phoneNumber: '',
@@ -22,9 +24,12 @@ const SignupPage = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    
+    registerUser(formData);
+    
+    console.log('Signup data submitted:', formData);
     alert('Signup successful!');
     navigate('/signin');
-    
   };
 
   return (
